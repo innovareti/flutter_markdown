@@ -576,6 +576,8 @@ void main() {
       expect(find.byType(SelectableText), findsNWidgets(2));
     });
 
+    // TODO: Test textAlign property
+
     testWidgets(' - style', (WidgetTester tester) async {
       final ThemeData theme = ThemeData.light().copyWith(textTheme: textTheme);
 

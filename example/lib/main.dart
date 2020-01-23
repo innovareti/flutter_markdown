@@ -106,6 +106,7 @@ void main() {
         body: SafeArea(
           child: Markdown(
             selectable: true,
+            textAlign: TextAlign.center,
             data: _markdownData,
             imageDirectory: 'https://raw.githubusercontent.com',
           ),

@@ -62,6 +62,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     Key key,
     @required this.data,
     this.selectable = false,
+    this.textAlign = TextAlign.start,
     this.styleSheet,
     this.styleSheetTheme = MarkdownStyleSheetBaseTheme.material,
     this.syntaxHighlighter,
@@ -73,6 +74,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.fitContent = false,
   })  : assert(data != null),
         assert(selectable != null),
+        assert(textAlign != null),
         super(key: key);
 
   /// The Markdown to display.
@@ -82,6 +84,11 @@ abstract class MarkdownWidget extends StatefulWidget {
   ///
   /// Defaults to false.
   final bool selectable;
+
+  /// How the text should be aligned horizontally.
+  ///
+  /// Defaults to TextAlign.start.
+  final TextAlign textAlign;
 
   /// The styles to use when displaying the Markdown.
   ///
@@ -166,6 +173,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> implements MarkdownBuil
     final MarkdownBuilder builder = MarkdownBuilder(
       delegate: this,
       selectable: widget.selectable,
+      textAlign: widget.textAlign,
       styleSheet: styleSheet,
       imageDirectory: widget.imageDirectory,
       imageBuilder: widget.imageBuilder,
@@ -220,6 +228,7 @@ class MarkdownBody extends MarkdownWidget {
     Key key,
     @required String data,
     bool selectable = false,
+    TextAlign textAlign = TextAlign.start,
     MarkdownStyleSheet styleSheet,
     MarkdownStyleSheetBaseTheme styleSheetTheme,
     SyntaxHighlighter syntaxHighlighter,
@@ -234,6 +243,7 @@ class MarkdownBody extends MarkdownWidget {
           key: key,
           data: data,
           selectable: selectable,
+          textAlign: textAlign,
           styleSheet: styleSheet,
           styleSheetTheme: styleSheetTheme,
           syntaxHighlighter: syntaxHighlighter,
@@ -276,6 +286,7 @@ class Markdown extends MarkdownWidget {
     Key key,
     @required String data,
     bool selectable = false,
+    TextAlign textAlign = TextAlign.start,
     MarkdownStyleSheet styleSheet,
     MarkdownStyleSheetBaseTheme styleSheetTheme,
     SyntaxHighlighter syntaxHighlighter,
@@ -291,6 +302,7 @@ class Markdown extends MarkdownWidget {
           key: key,
           data: data,
           selectable: selectable,
+          textAlign: textAlign,
           styleSheet: styleSheet,
           styleSheetTheme: styleSheetTheme,
           syntaxHighlighter: syntaxHighlighter,

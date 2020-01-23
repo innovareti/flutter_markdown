@@ -95,6 +95,7 @@ class MarkdownBuilder implements md.NodeVisitor {
   MarkdownBuilder({
     @required this.delegate,
     @required this.selectable,
+    @required this.textAlign,
     @required this.styleSheet,
     @required this.imageDirectory,
     @required this.imageBuilder,
@@ -109,6 +110,11 @@ class MarkdownBuilder implements md.NodeVisitor {
   ///
   /// Defaults to false.
   final bool selectable;
+
+  /// How the text should be aligned horizontally.
+  ///
+  /// Defaults to TextAlign.start.
+  final TextAlign textAlign;
 
   /// Defines which [TextStyle] objects to use for each type of element.
   final MarkdownStyleSheet styleSheet;
@@ -493,7 +499,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       return RichText(
         text: text,
         textScaleFactor: styleSheet.textScaleFactor,
-        textAlign: TextAlign.justify,
+        textAlign: textAlign,
       );
     }
   }
