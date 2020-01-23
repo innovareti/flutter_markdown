@@ -493,6 +493,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       return RichText(
         text: text,
         textScaleFactor: styleSheet.textScaleFactor,
+        textAlign: TextAlign.justify,
       );
     }
   }
