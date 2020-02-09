@@ -104,11 +104,31 @@ void main() {
           title: const Text('Markdown Demo'),
         ),
         body: SafeArea(
-          child: Markdown(
-            selectable: true,
-            textAlign: TextAlign.center,
-            data: _markdownData,
-            imageDirectory: 'https://raw.githubusercontent.com',
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                MarkdownBody(
+                  selectable: true,
+                  data: _markdownData,
+                  imageDirectory: 'https://raw.githubusercontent.com',
+                ),
+                MarkdownBody(
+                  selectable: true,
+                  textAlign: TextAlign.center,
+                  data: _markdownData,
+                  imageDirectory: 'https://raw.githubusercontent.com',
+                ),
+                MarkdownBody(
+                  selectable: true,
+                  textAlign: TextAlign.right,
+                  data: _markdownData,
+                  imageDirectory: 'https://raw.githubusercontent.com',
+                  styleSheet: MarkdownStyleSheet(
+                    tableHeadAlign: TextAlign.left,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

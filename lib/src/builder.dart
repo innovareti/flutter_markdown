@@ -159,7 +159,27 @@ class MarkdownBuilder implements md.NodeVisitor {
     assert(_tables.isEmpty);
     assert(_inlines.isEmpty);
     assert(!_isInBlockquote);
-    return _blocks.single.children;
+
+    switch (textAlign) {
+      case TextAlign.right:
+      case TextAlign.end:
+        return _blocks.single.children
+            .map((e) => Align(
+                  child: e,
+                  alignment: Alignment.centerRight,
+                ))
+            .toList();
+        break;
+      case TextAlign.center:
+        return _blocks.single.children
+            .map((e) => Center(
+                  child: e,
+                ))
+            .toList();
+        break;
+      default:
+        return _blocks.single.children;
+    }
   }
 
   @override
@@ -263,16 +283,49 @@ class MarkdownBuilder implements md.NodeVisitor {
           } else {
             bullet = _buildBullet(_listIndents.last);
           }
-          child = Row(
-            crossAxisAlignment: CrossAxisAlignment.start, // See #147
-            children: <Widget>[
-              SizedBox(
-                width: styleSheet.listIndent,
-                child: bullet,
-              ),
-              Expanded(child: child)
-            ],
-          );
+
+          switch (textAlign) {
+            case TextAlign.end:
+            case TextAlign.right:
+              child = Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start, // See #147
+                children: <Widget>[
+                  SizedBox(
+                    width: styleSheet.listIndent,
+                    child: bullet,
+                  ),
+                  child,
+                ],
+              );
+              break;
+
+            case TextAlign.center:
+              child = Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start, // See #147
+                children: <Widget>[
+                  SizedBox(
+                    width: styleSheet.listIndent,
+                    child: bullet,
+                  ),
+                  child,
+                ],
+              );
+              break;
+
+            default:
+              child = Row(
+                crossAxisAlignment: CrossAxisAlignment.start, // See #147
+                children: <Widget>[
+                  SizedBox(
+                    width: styleSheet.listIndent,
+                    child: bullet,
+                  ),
+                  Expanded(child: child)
+                ],
+              );
+          }
         }
       } else if (tag == 'table') {
         child = Table(
@@ -316,7 +369,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         TextAlign align;
         String style = element.attributes['style'];
         if (style == null) {
-          align = tag == 'th' ? styleSheet.tableHeadAlign : TextAlign.left;
+          align = tag == 'th' ? styleSheet.tableHeadAlign : textAlign;
         } else {
           RegExp regExp = RegExp(r'text-align: (left|center|right)');
           Match match = regExp.matchAsPrefix(style);
@@ -413,13 +466,29 @@ class MarkdownBuilder implements md.NodeVisitor {
   }
 
   Widget _buildTableCell(List<Widget> children, {TextAlign textAlign}) {
+    WrapAlignment wrapAlignment;
+    switch (textAlign) {
+      case TextAlign.right:
+      case TextAlign.end:
+        wrapAlignment = WrapAlignment.end;
+        break;
+      case TextAlign.center:
+        wrapAlignment = WrapAlignment.center;
+        break;
+      default:
+        wrapAlignment = WrapAlignment.start;
+    }
+
     return TableCell(
       child: Padding(
         padding: styleSheet.tableCellsPadding,
         child: DefaultTextStyle(
           style: styleSheet.tableBody,
           textAlign: textAlign,
-          child: Wrap(children: children),
+          child: Wrap(
+            children: children,
+            alignment: wrapAlignment,
+          ),
         ),
       ),
     );
@@ -494,6 +563,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       return SelectableText.rich(
         text,
         //textScaleFactor: styleSheet.textScaleFactor,
+        textAlign: textAlign,
       );
     } else {
       return RichText(
